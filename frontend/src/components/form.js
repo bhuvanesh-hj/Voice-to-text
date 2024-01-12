@@ -149,7 +149,7 @@ const Form = () => {
 
   const handleEdit = async (user) => {
     setEdit(true);
-    setUserId(user.id);
+    setUserId(user._id);
     setFormData({
       firstName: user.firstName,
       lastName: user.lastName,

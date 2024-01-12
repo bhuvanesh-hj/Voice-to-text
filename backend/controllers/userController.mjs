@@ -14,8 +14,6 @@ export const addUser = async (req, res) => {
       aadhaarNumber,
     } = req.body;
 
-    console.log(req.body)
-
     // Check if all the required fields are provided.
     if (
       !firstName ||
@@ -31,9 +29,7 @@ export const addUser = async (req, res) => {
     }
 
     // finding the user if exist
-    const userExist = await User.findOne({
-      where: { aadhaarNumber: aadhaarNumber },
-    });
+    const userExist = await User.findOne({ aadhaarNumber: aadhaarNumber })
     // if the userExists true returns user exists
     if (userExist) {
       return res.status(401).json({ message: "User already exists." });
@@ -68,7 +64,7 @@ export const addUser = async (req, res) => {
 // This function retrieves all users from the database.
 export const getUsers = async (req, res) => {
   try {
-    const users = await User.findAll();
+    const users = await User.find();
     res.status(200).json(users);
   } catch (error) {
     console.error("Error retrieving users:", error);
@@ -82,14 +78,10 @@ export const getUsers = async (req, res) => {
 export const updateUser = async (req, res) => {
   try {
     const { userId } = req.params;
-    const [updated] = await User.update(req.body, {
-      where: { id: userId },
-    });
-    if (updated) {
-      const updatedUser = await User.findByPk(userId);
-      res
-        .status(200)
-        .json({ message: "User updated successfully", user: updatedUser });
+    const updatedUser = await User.findByIdAndUpdate(userId, req.body, { new: true });
+    
+    if (updatedUser) {
+      res.status(200).json({ message: "User updated successfully", user: updatedUser });
     } else {
       res.status(404).json({ message: "User not found" });
     }
@@ -103,10 +95,8 @@ export const updateUser = async (req, res) => {
 export const deleteUser = async (req, res) => {
   try {
     const { userId } = req.params;
-    const deleted = await User.destroy({
-      where: { id: userId },
-    });
-    if (deleted) {
+    const deletedUser = await User.findByIdAndDelete(userId);
+    if (deletedUser) {
       res.status(200).json({ message: "User deleted successfully" });
     } else {
       res.status(404).json({ message: "User not found" });

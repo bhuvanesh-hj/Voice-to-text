@@ -2,7 +2,7 @@ import express from "express";
 import { config } from "dotenv";
 import path from "path";
 
-import sequelize from "./db/dbConnection.mjs";
+import connectDb from "./db/dbConnection.mjs";
 
 import UserRoutes from "./routes/userRoutes.mjs";
 
@@ -14,6 +14,7 @@ const app = express();
 const port = process.env.PORT || 4000;
 
 // use express.json() middleware for parsing JSON bodies.
+connectDb();
 app.use(express.json());
 
 // user routes
@@ -42,14 +43,4 @@ app.use((req, res, next) => {
   res.status(404).send("Sorry, that route does not exist.");
 });
 
-// Synchronizing the Sequelize models with the database.
-sequelize
-  .sync({ force: false })
-  // 'force: false' ensures we don't drop tables on startup.
-  .then((res) => {
-    // starting the server on the port 4000 after database synchronizing.
-    app.listen(4000, () =>
-      console.log(`Server started running at PORT: ${port}`)
-    );
-  })
-  .catch((err) => console.log("error"));
+app.listen(4000, () => console.log(`Server started running at PORT: ${port}`));

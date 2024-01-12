@@ -24,7 +24,7 @@ const UserList = ({ updateUser, user }) => {
   const deleteUser = async (userId) => {
     try {
       await axios.delete(`/api/users/deleteUser/${userId}`);
-      setUsers(users.filter((user) => user.id !== userId));
+      setUsers(users.filter((user) => user._id !== userId));
     } catch (error) {
       console.error("Error deleting user:", error);
     }
@@ -52,7 +52,7 @@ const UserList = ({ updateUser, user }) => {
       <ul className="list-group mt-3">
         {users.map((user) => (
           <li
-            key={user.id}
+            key={user._id}
             className="list-group-item d-flex justify-content-between align-items-center"
           >
             {user.firstName} {user.lastName}
@@ -71,7 +71,7 @@ const UserList = ({ updateUser, user }) => {
               </button>
               <button
                 className="btn btn-danger btn-sm"
-                onClick={() => deleteUser(user.id)}
+                onClick={() => deleteUser(user._id)}
               >
                 Delete
               </button>
