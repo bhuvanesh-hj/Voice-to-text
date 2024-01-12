@@ -1,0 +1,11 @@
+@media (max-width: 768px) {
+  .Home {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+
+
+
+
